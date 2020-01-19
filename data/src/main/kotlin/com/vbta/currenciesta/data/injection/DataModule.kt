@@ -2,7 +2,9 @@ package com.vbta.currenciesta.data.injection
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
+import com.vbta.currenciesta.data.repository.CurrencyRateRepository
 import com.vbta.currenciesta.data.source.remote.CurrenciesApi
+import com.vbta.currenciesta.domain.repository.CurrencyRateRepositoryContract
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -13,6 +15,7 @@ val dataModule = module {
     single { provideMoshi() }
     single { provideRetrofit(get()) }
     single { provideCurrenciesApi(get()) }
+    single<CurrencyRateRepositoryContract> { CurrencyRateRepository(get()) }
 }
 
 fun provideMoshi(): Moshi = Moshi.Builder()
