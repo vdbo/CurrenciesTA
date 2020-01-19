@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.ir.backend.js.compile
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -24,7 +26,12 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-
+    java {
+        compileOptions {
+            targetCompatibility = JavaVersion.VERSION_1_8
+            sourceCompatibility = JavaVersion.VERSION_1_8
+        }
+    }
     sourceSets {
         getByName("main")
         getByName("androidTest").java.srcDirs("src/androidTest/kotlin")
