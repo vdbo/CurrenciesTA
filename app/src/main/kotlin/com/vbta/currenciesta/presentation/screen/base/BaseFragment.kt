@@ -1,4 +1,4 @@
-package com.vbta.currenciesta.presentation.screen
+package com.vbta.currenciesta.presentation.screen.base
 
 import android.content.Context
 import androidx.fragment.app.Fragment
