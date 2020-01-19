@@ -34,7 +34,11 @@ android {
 }
 
 dependencies {
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    api(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+
+    api(project(":domain"))
+    api(project(":data"))
+
     api(Dependencies.appCompat)
     api(Dependencies.androidKtx)
     api(Dependencies.constraintLayout)

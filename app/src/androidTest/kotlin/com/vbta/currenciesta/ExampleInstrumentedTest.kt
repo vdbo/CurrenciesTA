@@ -1,4 +1,4 @@
-package com.vbta.myapplication
+package com.vbta.currenciesta
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

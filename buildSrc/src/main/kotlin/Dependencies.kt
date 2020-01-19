@@ -39,7 +39,7 @@ object Dependencies {
     const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava2}"
     const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
     const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
-    const val moshiCodegen = "com.squareup.moshi:moshi-kotlin-codegen:$${Versions.moshiCodegen}" //kapt
+    const val moshiCodegen = "com.squareup.moshi:moshi-kotlin-codegen:${Versions.moshiCodegen}"
     const val viewModel = "androidx.lifecycle:lifecycle-viewmodel:${Versions.viewModel}"
     const val archComponentsCompiler = "androidx.lifecycle:lifecycle-compiler:${Versions.archComponentsCompiler}"
     const val lifecycleExt = "androidx.lifecycle:lifecycle-extensions:${Versions.lifecycleExt}"

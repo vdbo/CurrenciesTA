@@ -1,4 +1,4 @@
-package com.vbta.myapplication.ui.main
+package com.vbta.currenciesta.presentation.ui.main
 
 import androidx.lifecycle.ViewModel
 

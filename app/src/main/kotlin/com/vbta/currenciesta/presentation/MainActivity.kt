@@ -1,8 +1,9 @@
-package com.vbta.myapplication
+package com.vbta.currenciesta.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.vbta.myapplication.ui.main.MainFragment
+import com.vbta.currenciesta.R
+import com.vbta.currenciesta.presentation.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 

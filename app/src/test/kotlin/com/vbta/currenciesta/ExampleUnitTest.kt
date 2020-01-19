@@ -1,4 +1,4 @@
-package com.vbta.myapplication
+package com.vbta.currenciesta
 
 import org.junit.Test
 
