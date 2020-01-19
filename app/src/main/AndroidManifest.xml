@@ -3,6 +3,7 @@
     package="com.vbta.currenciesta">
 
     <application
+        android:name=".presentation.CApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
