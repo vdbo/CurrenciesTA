@@ -49,10 +49,13 @@ dependencies {
     api(Dependencies.appCompat)
     api(Dependencies.androidKtx)
     api(Dependencies.constraintLayout)
+    api(Dependencies.recyclerView)
     api(Dependencies.koinViewModel)
     api(Dependencies.viewModel)
     api(Dependencies.lifecycleExt)
+
     kapt(Dependencies.archComponentsCompiler)
+
     androidTestImplementation(Dependencies.junitAndroid)
     androidTestImplementation(Dependencies.espresso)
 }

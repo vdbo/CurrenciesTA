@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CurrenciesTA</string>
+    <string name="rates">Rates</string>
+    <string name="default_amount">0</string>
 </resources>
