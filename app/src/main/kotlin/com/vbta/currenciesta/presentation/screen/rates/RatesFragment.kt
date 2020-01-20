@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.vbta.currenciesta.R
 import com.vbta.currenciesta.presentation.screen.base.BaseFragment
 import com.vbta.currenciesta.presentation.screen.rates.adapter.RatesAdapter
+import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.rates_fragment.*
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,8 +30,12 @@ class RatesFragment : BaseFragment<RatesViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rates.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        rates.adapter = ratesAdapter
+        with(rates) {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            adapter = ratesAdapter
+            setHasFixedSize(true)
+        }
+        disposables += vm.itemsChanges.subscribe(ratesAdapter::setItems)
     }
 
 }

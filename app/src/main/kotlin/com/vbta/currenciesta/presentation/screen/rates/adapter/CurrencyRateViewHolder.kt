@@ -18,7 +18,11 @@ class CurrencyRateViewHolder(itemView: View, actions: RatesActions) : RecyclerVi
         this@CurrencyRateViewHolder.item = item
         abbreviation.text = item.currencyAbbreviation
         name.text = item.currencyName
-        amount.setText(item.rate.toString())
+        setRate(item.rate)
+    }
+
+    fun setRate(rate: Float) {
+        itemView.amount.setText(rate.toString())
     }
 
 }

@@ -1,11 +1,9 @@
 package com.vbta.currenciesta.presentation.screen.rates.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
 import com.vbta.currenciesta.R
-import kotlinx.android.synthetic.main.item_currency_rate.view.*
 
 class RatesAdapter(private val actions: RatesActions) : RecyclerView.Adapter<CurrencyRateViewHolder>() {
 
@@ -23,7 +21,20 @@ class RatesAdapter(private val actions: RatesActions) : RecyclerView.Adapter<Cur
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: CurrencyRateViewHolder, position: Int) {
-        holder.bind(items[position])
+        onBindViewHolder(holder, position, emptyList())
+    }
+
+    override fun onBindViewHolder(holder: CurrencyRateViewHolder, position: Int, payloads: List<Any>) {
+        if (payloads.isEmpty()) {
+            holder.bind(items[position])
+            return
+        }
+        (payloads[0] as? Payload<*>)?.let {
+            when (it) {
+                is Payload.Rate -> holder.setRate(it.value)
+                else -> holder.bind(items[position])
+            }
+        }
     }
 
     fun setItems(items: List<CurrencyRateListItem>) {
@@ -38,6 +49,28 @@ class RatesAdapter(private val actions: RatesActions) : RecyclerView.Adapter<Cur
         override fun areContentsTheSame(oldItem: CurrencyRateListItem, newItem: CurrencyRateListItem) =
             oldItem == newItem
 
+        override fun getChangePayload(oldItem: CurrencyRateListItem, newItem: CurrencyRateListItem): Any? {
+            return if (newItem.rate != oldItem.rate) {
+                Payload.Rate(newItem.rate)
+            } else {
+                Payload.None
+            }
+        }
+
+    }
+}
+
+private sealed class Payload<T>(open val value: T) {
+
+    abstract val key: String
+
+    data class Rate(
+        override val value: Float,
+        override val key: String = "rate"
+    ) : Payload<Float>(value)
+
+    object None : Payload<Unit>(Unit) {
+        override val key: String = ""
     }
 
 }
