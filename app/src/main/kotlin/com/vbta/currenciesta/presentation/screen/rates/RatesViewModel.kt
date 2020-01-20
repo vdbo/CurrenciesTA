@@ -1,6 +1,5 @@
 package com.vbta.currenciesta.presentation.screen.rates
 
-import android.util.Log
 import com.vbta.currenciesta.domain.usecase.ObserveCurrencyRateUseCase
 import com.vbta.currenciesta.presentation.screen.base.BaseViewModel
 import com.vbta.currenciesta.presentation.screen.rates.adapter.CurrencyRateListItem
@@ -10,6 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.subjects.PublishSubject
+import timber.log.Timber
 
 class RatesViewModel(
     observeCurrencyRateUseCase: ObserveCurrencyRateUseCase
@@ -35,7 +35,7 @@ class RatesViewModel(
                         }
                     )
                 },
-                onError = { Log.d("RatesViewModel", "Failed observe currency rates", it) }
+                onError = { Timber.d(it, "Failed observe currency rates") }
             )
     }
 
