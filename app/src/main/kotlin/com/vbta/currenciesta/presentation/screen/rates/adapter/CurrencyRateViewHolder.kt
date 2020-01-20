@@ -4,7 +4,6 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.vbta.currenciesta.presentation.utils.getImage
 import kotlinx.android.synthetic.main.item_currency_rate.view.*
-import java.util.*
 
 class CurrencyRateViewHolder(itemView: View, actions: RatesActions) : RecyclerView.ViewHolder(itemView) {
 
@@ -18,9 +17,9 @@ class CurrencyRateViewHolder(itemView: View, actions: RatesActions) : RecyclerVi
 
     fun bind(item: CurrencyRateListItem) = with(itemView) {
         this@CurrencyRateViewHolder.item = item
-        flag.setImageDrawable(Currency.getInstance(item.currencyAbbreviation).getImage(itemView.context))
-        abbreviation.text = item.currencyAbbreviation
-        name.text = item.currencyName
+        flag.setImageDrawable(item.currency.getImage(itemView.context))
+        code.text = item.currency.currencyCode
+        name.text = item.currency.displayName
         setRate(item.rate)
     }
 

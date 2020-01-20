@@ -44,7 +44,7 @@ class RatesAdapter(private val actions: RatesActions) : RecyclerView.Adapter<Cur
     class DiffItemCallback : DiffUtil.ItemCallback<CurrencyRateListItem>() {
 
         override fun areItemsTheSame(oldItem: CurrencyRateListItem, newItem: CurrencyRateListItem) =
-            oldItem.javaClass == newItem.javaClass && oldItem.currencyAbbreviation == newItem.currencyAbbreviation
+            oldItem.javaClass == newItem.javaClass && oldItem.currency.currencyCode == newItem.currency.currencyCode
 
         override fun areContentsTheSame(oldItem: CurrencyRateListItem, newItem: CurrencyRateListItem) =
             oldItem == newItem
