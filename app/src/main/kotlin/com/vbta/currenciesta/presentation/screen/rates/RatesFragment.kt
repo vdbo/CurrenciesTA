@@ -8,12 +8,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.vbta.currenciesta.R
 import com.vbta.currenciesta.presentation.screen.base.BaseFragment
 import com.vbta.currenciesta.presentation.screen.rates.adapter.RatesAdapter
+import com.vbta.currenciesta.presentation.utils.ScrollStateChangeListener
+import com.vbta.currenciesta.presentation.utils.ScrollingState
+import io.reactivex.Observer
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.rates_fragment.*
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RatesFragment : BaseFragment<RatesViewModel>() {
+
+    interface ViewsChanges {
+        val scrollingStateObserver: Observer<ScrollingState>
+    }
 
     companion object {
         fun newInstance() = RatesFragment()
@@ -34,7 +41,12 @@ class RatesFragment : BaseFragment<RatesViewModel>() {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             adapter = ratesAdapter
             setHasFixedSize(true)
+            addOnScrollListener(ScrollStateChangeListener(vm.scrollingStateObserver))
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
         disposables += vm.itemsChanges.subscribe(ratesAdapter::setItems)
     }
 

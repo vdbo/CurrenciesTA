@@ -50,7 +50,7 @@ dependencies {
     api(Dependencies.androidKtx)
     api(Dependencies.constraintLayout)
     api(Dependencies.recyclerView)
-    api(Dependencies.circleImageView)
+    api(Dependencies.glide)
     api(Dependencies.koinViewModel)
     api(Dependencies.viewModel)
     api(Dependencies.lifecycleExt)
