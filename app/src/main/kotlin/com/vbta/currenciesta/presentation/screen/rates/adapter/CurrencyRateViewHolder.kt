@@ -28,11 +28,11 @@ class CurrencyRateViewHolder(itemView: View, actions: RatesActions) : RecyclerVi
             .into(flag)
         code.text = item.currency.currencyCode
         name.text = item.currency.displayName
-        setRate(item.rate)
+        setAmount(item.amount)
     }
 
-    fun setRate(rate: Float) {
-        itemView.amount.setText(rate.toString())
+    fun setAmount(amount: Double) {
+        itemView.amount.setText(amount.toString())
     }
 
 }

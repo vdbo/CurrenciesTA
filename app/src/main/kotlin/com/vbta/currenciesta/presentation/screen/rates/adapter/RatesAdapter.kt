@@ -31,7 +31,7 @@ class RatesAdapter(private val actions: RatesActions) : RecyclerView.Adapter<Cur
         }
         (payloads[0] as? Payload<*>)?.let {
             when (it) {
-                is Payload.Rate -> holder.setRate(it.value)
+                is Payload.Rate -> holder.setAmount(it.value)
                 else -> holder.bind(items[position])
             }
         }
@@ -50,8 +50,8 @@ class RatesAdapter(private val actions: RatesActions) : RecyclerView.Adapter<Cur
             oldItem == newItem
 
         override fun getChangePayload(oldItem: CurrencyRateListItem, newItem: CurrencyRateListItem): Any? {
-            return if (newItem.rate != oldItem.rate) {
-                Payload.Rate(newItem.rate)
+            return if (newItem.amount != oldItem.amount) {
+                Payload.Rate(newItem.amount)
             } else {
                 Payload.None
             }
@@ -65,9 +65,9 @@ private sealed class Payload<T>(open val value: T) {
     abstract val key: String
 
     data class Rate(
-        override val value: Float,
+        override val value: Double,
         override val key: String = "rate"
-    ) : Payload<Float>(value)
+    ) : Payload<Double>(value)
 
     object None : Payload<Unit>(Unit) {
         override val key: String = ""

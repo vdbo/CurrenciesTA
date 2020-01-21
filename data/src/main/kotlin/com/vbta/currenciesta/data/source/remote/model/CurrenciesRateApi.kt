@@ -11,5 +11,5 @@ data class CurrenciesRateApi(
     @Json(name = "date")
     val date: Date,
     @Json(name = "rates")
-    val rates: Map<String, Float>
+    val rates: Map<String, Double>
 )

@@ -3,7 +3,7 @@ object Versions {
     const val kotlin = "1.3.61"
     const val androidMinSdk = 21
     const val androidTargetSdk = 28
-    const val androidXAppCompat = "1.1.0"
+    const val androidXAppCompat = "1.2.0-alpha01"
     const val androidKtx = "1.1.0"
     const val constraintLayout = "1.1.3"
     const val recyclerView = "1.1.0"

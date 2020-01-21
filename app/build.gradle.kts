@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.ir.backend.js.compile
-
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -13,7 +11,7 @@ apply(from = "../test_dependencies.gradle.kts")
 android {
     compileSdkVersion(Versions.androidTargetSdk)
     defaultConfig {
-        applicationId = "com.vbta.myapplication"
+        applicationId = "com.vbta.currenciesta"
         minSdkVersion(Versions.androidMinSdk)
         targetSdkVersion(Versions.androidTargetSdk)
         versionCode = 1
@@ -37,6 +35,16 @@ android {
         getByName("androidTest").java.srcDirs("src/androidTest/kotlin")
         getByName("main").java.srcDirs("src/main/kotlin")
         getByName("test").java.srcDirs("src/test/kotlin")
+    }
+}
+
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "androidx") {
+            if (!requested.name.startsWith("multidex")) {
+                useVersion("${Versions.androidTargetSdk}.+")
+            }
+        }
     }
 }
 

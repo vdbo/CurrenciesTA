@@ -12,7 +12,9 @@ import com.vbta.currenciesta.presentation.utils.ScrollingState
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
+import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 import java.util.*
@@ -24,6 +26,7 @@ class RatesViewModel(
     private val _itemsChanges = PublishSubject.create<List<CurrencyRateListItem>>()
     private var observeCurrencyDisposable = Disposables.empty()
     override val scrollingStateObserver = PublishSubject.create<ScrollingState>()
+    override val baseCurrencyObserver = BehaviorSubject.create<CurrencyRateListItem>()
 
     val itemsChanges: Observable<List<CurrencyRateListItem>> = _itemsChanges
 
@@ -41,14 +44,17 @@ class RatesViewModel(
     }
 
     private fun initCurrencyRateObservation() {
-        observeCurrencyDisposable = observeCurrencyRateUseCase.execute(
-            CurrencyRate(Currency.getInstance("EUR"), 0f)
-        )
+        observeCurrencyDisposable = Observables.combineLatest(
+            baseCurrencyObserver,
+            observeCurrencyRateUseCase.execute(
+                CurrencyRate(Currency.getInstance("EUR"), 0.0)
+            )
+        ) { baseCurrency, rates -> rates.toCurrencyRateListItem(baseCurrency.amount) }
             .takeUntil(scrollingStateObserver.filter { it == ScrollingState.SCROLLING })
             .repeatWhen { scrollingStateObserver.filter { it == ScrollingState.IDLE } }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
-                onNext = { _itemsChanges.onNext(it.toCurrencyRateListItem()) },
+                onNext = { _itemsChanges.onNext(it) },
                 onError = { Timber.d(it, "Failed observe currency rates") }
             )
     }

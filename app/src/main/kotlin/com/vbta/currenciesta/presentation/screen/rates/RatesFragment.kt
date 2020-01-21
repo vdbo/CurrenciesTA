@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vbta.currenciesta.R
 import com.vbta.currenciesta.presentation.screen.base.BaseFragment
+import com.vbta.currenciesta.presentation.screen.rates.adapter.CurrencyRateListItem
 import com.vbta.currenciesta.presentation.screen.rates.adapter.RatesAdapter
 import com.vbta.currenciesta.presentation.utils.ScrollStateChangeListener
 import com.vbta.currenciesta.presentation.utils.ScrollingState
@@ -20,6 +21,7 @@ class RatesFragment : BaseFragment<RatesViewModel>() {
 
     interface ViewsChanges {
         val scrollingStateObserver: Observer<ScrollingState>
+        val baseCurrencyObserver: Observer<CurrencyRateListItem>
     }
 
     companion object {

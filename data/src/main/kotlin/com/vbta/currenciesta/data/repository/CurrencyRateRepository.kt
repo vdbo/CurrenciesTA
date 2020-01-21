@@ -15,7 +15,7 @@ class CurrencyRateRepository(
         currenciesApi.getCurrenciesRate(currency.currencyCode)
             .map { result ->
                 //TODO change to have right rate
-                listOf(CurrencyRate(currency, 0f))
+                listOf(CurrencyRate(currency, 0.0))
                     .plus(result.rates.map { CurrencyRate(Currency.getInstance(it.key), it.value) })
             }
             .subscribeOn(Schedulers.io())
