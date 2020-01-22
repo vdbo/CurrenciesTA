@@ -4,10 +4,10 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.screen.rates.RatesFragment">
+    tools:context=".presentation.screen.rates.CurrenciesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rates"
+        android:id="@+id/currencies"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

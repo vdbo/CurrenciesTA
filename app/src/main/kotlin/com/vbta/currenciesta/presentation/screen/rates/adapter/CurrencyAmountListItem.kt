@@ -3,7 +3,7 @@ package com.vbta.currenciesta.presentation.screen.rates.adapter
 import com.vbta.currenciesta.presentation.screen.base.ListItem
 import java.util.*
 
-data class CurrencyRateListItem(
+data class CurrencyAmountListItem(
     val currency: Currency,
     val amount: Double,
     val isBase: Boolean = false,

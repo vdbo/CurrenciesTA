@@ -5,53 +5,53 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.*
 import com.vbta.currenciesta.R
 
-class RatesAdapter(private val actions: RatesActions) : RecyclerView.Adapter<CurrencyRateViewHolder>() {
+class CurrenciesAdapter(private val actions: CurrenciesActions) : RecyclerView.Adapter<CurrencyAmountViewHolder>() {
 
     private val diffHelper = AsyncListDiffer(
         AdapterListUpdateCallback(this),
         AsyncDifferConfig.Builder(DiffItemCallback()).build()
     )
-    private val items: List<CurrencyRateListItem> get() = diffHelper.currentList
+    private val items: List<CurrencyAmountListItem> get() = diffHelper.currentList
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyRateViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_currency_rate, parent, false)
-        return CurrencyRateViewHolder(view, actions)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyAmountViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_currency_amount, parent, false)
+        return CurrencyAmountViewHolder(view, actions)
     }
 
     override fun getItemCount() = items.size
 
-    override fun onBindViewHolder(holder: CurrencyRateViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CurrencyAmountViewHolder, position: Int) {
         onBindViewHolder(holder, position, emptyList())
     }
 
-    override fun onBindViewHolder(holder: CurrencyRateViewHolder, position: Int, payloads: List<Any>) {
+    override fun onBindViewHolder(holder: CurrencyAmountViewHolder, position: Int, payloads: List<Any>) {
         if (payloads.isEmpty()) {
             holder.bind(items[position])
             return
         }
         (payloads[0] as? Payload<*>)?.let {
             when (it) {
-                is Payload.Rate -> holder.setAmount(it.value)
+                is Payload.Amount -> holder.setAmount(it.value)
                 else -> holder.bind(items[position])
             }
         }
     }
 
-    fun setItems(items: List<CurrencyRateListItem>) {
+    fun setItems(items: List<CurrencyAmountListItem>) {
         diffHelper.submitList(items)
     }
 
-    class DiffItemCallback : DiffUtil.ItemCallback<CurrencyRateListItem>() {
+    class DiffItemCallback : DiffUtil.ItemCallback<CurrencyAmountListItem>() {
 
-        override fun areItemsTheSame(oldItem: CurrencyRateListItem, newItem: CurrencyRateListItem) =
+        override fun areItemsTheSame(oldItem: CurrencyAmountListItem, newItem: CurrencyAmountListItem) =
             oldItem.javaClass == newItem.javaClass && oldItem.currency.currencyCode == newItem.currency.currencyCode
 
-        override fun areContentsTheSame(oldItem: CurrencyRateListItem, newItem: CurrencyRateListItem) =
+        override fun areContentsTheSame(oldItem: CurrencyAmountListItem, newItem: CurrencyAmountListItem) =
             oldItem == newItem
 
-        override fun getChangePayload(oldItem: CurrencyRateListItem, newItem: CurrencyRateListItem): Any? {
+        override fun getChangePayload(oldItem: CurrencyAmountListItem, newItem: CurrencyAmountListItem): Any? {
             return if (newItem.amount != oldItem.amount) {
-                Payload.Rate(newItem.amount)
+                Payload.Amount(newItem.amount)
             } else {
                 Payload.None
             }
@@ -64,9 +64,9 @@ private sealed class Payload<T>(open val value: T) {
 
     abstract val key: String
 
-    data class Rate(
+    data class Amount(
         override val value: Double,
-        override val key: String = "rate"
+        override val key: String = "amount"
     ) : Payload<Double>(value)
 
     object None : Payload<Unit>(Unit) {

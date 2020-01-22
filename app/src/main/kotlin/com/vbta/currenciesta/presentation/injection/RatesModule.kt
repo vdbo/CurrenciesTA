@@ -1,14 +1,12 @@
 package com.vbta.currenciesta.presentation.injection
 
-import com.vbta.currenciesta.domain.usecase.ObserveCurrencyRateUseCase
-import com.vbta.currenciesta.presentation.screen.rates.RatesViewModel
-import com.vbta.currenciesta.presentation.screen.rates.adapter.RatesActions
-import com.vbta.currenciesta.presentation.screen.rates.adapter.RatesAdapter
+import com.vbta.currenciesta.domain.usecase.ObserveCurrenciesUseCase
+import com.vbta.currenciesta.presentation.screen.rates.CurrenciesViewModel
+import com.vbta.currenciesta.presentation.screen.rates.adapter.CurrenciesActions
+import com.vbta.currenciesta.presentation.screen.rates.adapter.CurrenciesAdapter
 
 fun provideRatesViewModel(
-    observeCurrencyRateUseCase: ObserveCurrencyRateUseCase
-) = RatesViewModel(observeCurrencyRateUseCase)
+    observeCurrenciesUseCase: ObserveCurrenciesUseCase
+) = CurrenciesViewModel(observeCurrenciesUseCase)
 
-fun provideRatesAdapter(ratesActions: RatesActions) = RatesAdapter(ratesActions)
-
-fun provideRatesActions(viewModel: RatesViewModel): RatesActions = viewModel
+fun provideRatesAdapter(actions: CurrenciesActions) = CurrenciesAdapter(actions)

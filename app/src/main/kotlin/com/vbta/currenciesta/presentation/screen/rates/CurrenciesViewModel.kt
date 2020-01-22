@@ -2,11 +2,9 @@ package com.vbta.currenciesta.presentation.screen.rates
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.OnLifecycleEvent
-import com.vbta.currenciesta.domain.model.CurrencyRate
-import com.vbta.currenciesta.domain.usecase.ObserveCurrencyRateUseCase
+import com.vbta.currenciesta.domain.usecase.ObserveCurrenciesUseCase
 import com.vbta.currenciesta.presentation.screen.base.BaseViewModel
-import com.vbta.currenciesta.presentation.screen.rates.adapter.CurrencyRateListItem
-import com.vbta.currenciesta.presentation.screen.rates.adapter.RatesActions
+import com.vbta.currenciesta.presentation.screen.rates.adapter.CurrencyAmountListItem
 import com.vbta.currenciesta.presentation.screen.rates.mapper.toCurrencyRateListItem
 import com.vbta.currenciesta.presentation.utils.ScrollingState
 import io.reactivex.Observable
@@ -19,16 +17,16 @@ import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 import java.util.*
 
-class RatesViewModel(
-    private val observeCurrencyRateUseCase: ObserveCurrencyRateUseCase
-) : BaseViewModel(), RatesActions, RatesFragment.ViewsChanges {
+class CurrenciesViewModel(
+    private val observeCurrenciesUseCase: ObserveCurrenciesUseCase
+) : BaseViewModel(), CurrenciesFragment.ViewsChanges {
 
-    private val _itemsChanges = PublishSubject.create<List<CurrencyRateListItem>>()
+    private val _itemsChanges = PublishSubject.create<List<CurrencyAmountListItem>>()
+    private val _baseCurrencyAmountChanges = BehaviorSubject.createDefault<Double>(1.0)
     private var observeCurrencyDisposable = Disposables.empty()
     override val scrollingStateObserver = PublishSubject.create<ScrollingState>()
-    override val baseCurrencyObserver = BehaviorSubject.create<CurrencyRateListItem>()
 
-    val itemsChanges: Observable<List<CurrencyRateListItem>> = _itemsChanges
+    val itemsChanges: Observable<List<CurrencyAmountListItem>> = _itemsChanges
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onScreenResumed() {
@@ -40,16 +38,24 @@ class RatesViewModel(
         observeCurrencyDisposable.dispose()
     }
 
-    override fun onRateClicked(item: CurrencyRateListItem) {
+    fun onCurrencyClicked(item: CurrencyAmountListItem) {
+    }
+
+    fun onBaseCurrencyAmountChanged(amount: Double) {
+        _baseCurrencyAmountChanges.onNext(amount)
     }
 
     private fun initCurrencyRateObservation() {
         observeCurrencyDisposable = Observables.combineLatest(
-            baseCurrencyObserver,
-            observeCurrencyRateUseCase.execute(
-                CurrencyRate(Currency.getInstance("EUR"), 0.0)
+            _baseCurrencyAmountChanges,
+            observeCurrenciesUseCase.execute(Currency.getInstance("EUR"))
+        ) { baseCurrencyAmount, rates ->
+            listOf(
+                CurrencyAmountListItem(Currency.getInstance("EUR"), baseCurrencyAmount, true)
+            ).plus(
+                rates.toCurrencyRateListItem(baseCurrencyAmount)
             )
-        ) { baseCurrency, rates -> rates.toCurrencyRateListItem(baseCurrency.amount) }
+        }
             .takeUntil(scrollingStateObserver.filter { it == ScrollingState.SCROLLING })
             .repeatWhen { scrollingStateObserver.filter { it == ScrollingState.IDLE } }
             .observeOn(AndroidSchedulers.mainThread())
