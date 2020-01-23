@@ -1,8 +1,6 @@
 package com.vbta.currenciesta.presentation.screen.rates.adapter
 
-import android.text.TextWatcher
 import android.view.View
-import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -16,41 +14,46 @@ class CurrencyAmountViewHolder(
 ) : RecyclerView.ViewHolder(itemView) {
 
     private lateinit var item: CurrencyAmountListItem
-    private var amountTextWatcher: TextWatcher? = null
 
     init {
         itemView.setOnClickListener {
-            if (adapterPosition != RecyclerView.NO_POSITION) actions.onCurrencyClicked(item)
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                it.requestFocus()
+                actions.onCurrencyClicked(item)
+            }
         }
     }
 
-    fun bind(item: CurrencyAmountListItem) = with(itemView) {
-        this@CurrencyAmountViewHolder.item = item
-        Glide.with(itemView)
-            .load(item.currency.imageRes)
-            .placeholder(R.drawable.ic_cur_placeholder)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .circleCrop()
-            .into(flag)
-        code.text = item.currency.currencyCode
-        name.text = item.currency.displayName
+    fun bind(newItem: CurrencyAmountListItem) {
+        when {
+            !::item.isInitialized -> setFlag(newItem)
+            item.currency.currencyCode != newItem.currency.currencyCode -> setFlag(newItem)
+        }
+        item = newItem
+        itemView.code.text = item.currency.currencyCode
+        itemView.name.text = item.currency.displayName
+        setBase(item.isBase)
         setAmount(item.amount)
-        setAmountChangeListener(item.isBase)
     }
 
-    fun setAmount(amount: Double) {
+    fun setBase(isBase: Boolean) {
+        item = item.copy(isBase = isBase)
+        itemView.amount.isEnabled = item.isBase
+    }
+
+    fun setAmount(amount: Number) {
+        item = item.copy(amount = amount)
         itemView.amount.setText(amount.toString())
         itemView.amount.setSelection(amount.toString().length)
     }
 
-    private fun setAmountChangeListener(isBase: Boolean) = with(itemView) {
-        if (!isBase) {
-            amountTextWatcher?.let { amount.removeTextChangedListener(it) }
-            return@with
-        }
-        amountTextWatcher = amount.doOnTextChanged { text, _, _, _ ->
-            actions.onBaseCurrencyAmountChanged(text.toString().toDouble())
-        }
+    private fun setFlag(newItem: CurrencyAmountListItem) {
+        Glide.with(itemView)
+            .load(newItem.currency.imageRes)
+            .placeholder(R.drawable.ic_cur_placeholder)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .circleCrop()
+            .into(itemView.flag)
     }
 
 }

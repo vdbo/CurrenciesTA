@@ -48,6 +48,7 @@
         android:hint="@string/default_amount"
         android:importantForAutofill="no"
         android:inputType="numberDecimal"
+        android:textColor="@drawable/selector_et_text_color"
         android:lineSpacingExtra="5sp"
         tools:text="3204.10" />
 

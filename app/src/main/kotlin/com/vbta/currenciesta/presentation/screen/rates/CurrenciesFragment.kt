@@ -23,6 +23,7 @@ class CurrenciesFragment : BaseFragment<CurrenciesViewModel>(), CurrenciesAction
 
     interface ViewsChanges {
         val scrollingStateObserver: Observer<ScrollingState>
+        val onListLayoutCompletedObserver: Observer<Boolean>
     }
 
     companion object {
@@ -57,8 +58,8 @@ class CurrenciesFragment : BaseFragment<CurrenciesViewModel>(), CurrenciesAction
         vm.onCurrencyClicked(item)
     }
 
-    override fun onBaseCurrencyAmountChanged(amount: Double) {
-        vm.onBaseCurrencyAmountChanged(amount)
+    override fun onBaseCurrencyAmountChanged(currency: CurrencyAmountListItem) {
+        vm.onBaseCurrencyAmountChanged(currency)
     }
 
 }

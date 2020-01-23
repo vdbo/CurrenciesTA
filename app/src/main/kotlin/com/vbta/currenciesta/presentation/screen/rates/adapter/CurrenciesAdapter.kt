@@ -50,10 +50,10 @@ class CurrenciesAdapter(private val actions: CurrenciesActions) : RecyclerView.A
             oldItem == newItem
 
         override fun getChangePayload(oldItem: CurrencyAmountListItem, newItem: CurrencyAmountListItem): Any? {
-            return if (newItem.amount != oldItem.amount) {
-                Payload.Amount(newItem.amount)
-            } else {
-                Payload.None
+            return when {
+                newItem.isBase != oldItem.isBase -> Payload.Base(newItem.isBase)
+                newItem.amount != oldItem.amount -> Payload.Amount(newItem.amount)
+                else -> Payload.None
             }
         }
 
@@ -64,10 +64,15 @@ private sealed class Payload<T>(open val value: T) {
 
     abstract val key: String
 
+    data class Base(
+        override val value: Boolean,
+        override val key: String = "base"
+    ) : Payload<Boolean>(value)
+
     data class Amount(
-        override val value: Double,
+        override val value: Number,
         override val key: String = "amount"
-    ) : Payload<Double>(value)
+    ) : Payload<Number>(value)
 
     object None : Payload<Unit>(Unit) {
         override val key: String = ""

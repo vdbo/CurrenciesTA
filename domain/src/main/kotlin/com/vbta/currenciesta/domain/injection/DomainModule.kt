@@ -1,8 +1,8 @@
 package com.vbta.currenciesta.domain.injection
 
-import com.vbta.currenciesta.domain.usecase.ObserveCurrenciesUseCase
+import com.vbta.currenciesta.domain.usecase.GetCurrenciesRatesUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
-    single { ObserveCurrenciesUseCase(get()) }
+    single { GetCurrenciesRatesUseCase(get()) }
 }

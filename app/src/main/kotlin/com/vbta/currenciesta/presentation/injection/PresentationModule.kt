@@ -11,4 +11,5 @@ val presentationModule = module {
     scope(named<CurrenciesFragment>()) {
         scoped { (actions: CurrenciesActions) -> provideRatesAdapter(actions) }
     }
+    factory { provideObserveCurrenciesUseCase(get()) }
 }
