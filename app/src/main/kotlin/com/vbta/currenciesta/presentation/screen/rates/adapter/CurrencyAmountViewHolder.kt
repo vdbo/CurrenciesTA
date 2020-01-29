@@ -1,19 +1,23 @@
 package com.vbta.currenciesta.presentation.screen.rates.adapter
 
 import android.view.View
+import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.vbta.currenciesta.R
 import com.vbta.currenciesta.presentation.utils.imageRes
 import kotlinx.android.synthetic.main.item_currency_amount.view.*
+import java.text.NumberFormat
 
 class CurrencyAmountViewHolder(
     itemView: View,
-    private val actions: CurrenciesActions
+    private val actions: CurrenciesActions,
+    private val numberFormat: NumberFormat
 ) : RecyclerView.ViewHolder(itemView) {
 
     private lateinit var item: CurrencyAmountListItem
+    private var ignoreTextChanges: Boolean = true
 
     init {
         itemView.setOnClickListener {
@@ -21,6 +25,10 @@ class CurrencyAmountViewHolder(
                 it.requestFocus()
                 actions.onCurrencyClicked(item)
             }
+        }
+        itemView.amount.doAfterTextChanged {
+            if (!item.isBase || ignoreTextChanges) return@doAfterTextChanged
+            actions.onBaseCurrencyAmountChanged(item.copy(amount = numberFormat.parse(it.toString())))
         }
     }
 
@@ -30,21 +38,12 @@ class CurrencyAmountViewHolder(
             item.currency.currencyCode != newItem.currency.currencyCode -> setFlag(newItem)
         }
         item = newItem
-        itemView.code.text = item.currency.currencyCode
-        itemView.name.text = item.currency.displayName
-        setBase(item.isBase)
-        setAmount(item.amount)
+        if (item.isBase) bindAsBaseCurrency() else bindAsOtherCurrency()
     }
 
-    fun setBase(isBase: Boolean) {
-        item = item.copy(isBase = isBase)
-        itemView.amount.isEnabled = item.isBase
-    }
-
-    fun setAmount(amount: Number) {
+    fun updateAmount(amount: Number) {
         item = item.copy(amount = amount)
-        itemView.amount.setText(amount.toString())
-        itemView.amount.setSelection(amount.toString().length)
+        if (!item.isBase) itemView.amount.setText(numberFormat.format(item.amount.toDouble()))
     }
 
     private fun setFlag(newItem: CurrencyAmountListItem) {
@@ -54,6 +53,22 @@ class CurrencyAmountViewHolder(
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .circleCrop()
             .into(itemView.flag)
+    }
+
+    private fun bindAsBaseCurrency() {
+        itemView.code.text = item.currency.currencyCode
+        itemView.name.text = item.currency.displayName
+        itemView.amount.isEnabled = true
+        ignoreTextChanges = true
+        itemView.amount.setText(numberFormat.format(item.amount.toDouble()))
+        ignoreTextChanges = false
+    }
+
+    private fun bindAsOtherCurrency() {
+        itemView.code.text = item.currency.currencyCode
+        itemView.name.text = item.currency.displayName
+        itemView.amount.isEnabled = false
+        itemView.amount.setText(numberFormat.format(item.amount.toDouble()))
     }
 
 }

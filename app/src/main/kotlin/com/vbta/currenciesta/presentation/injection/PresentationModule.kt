@@ -9,7 +9,8 @@ import org.koin.dsl.module
 val presentationModule = module {
     viewModel { provideRatesViewModel(get()) }
     scope(named<CurrenciesFragment>()) {
-        scoped { (actions: CurrenciesActions) -> provideRatesAdapter(actions) }
+        scoped { provideDecimalFormatter() }
+        scoped { (actions: CurrenciesActions) -> provideRatesAdapter(actions, get()) }
     }
     factory { provideObserveCurrenciesUseCase(get()) }
 }

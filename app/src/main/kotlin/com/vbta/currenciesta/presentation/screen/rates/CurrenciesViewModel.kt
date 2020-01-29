@@ -46,8 +46,8 @@ class CurrenciesViewModel(
         observeCurrenciesDisposable.dispose()
     }
 
-    fun onCurrencyClicked(item: CurrencyAmountListItem) {
-        _baseCurrencyAmountChanges.onNext(item.copy(isBase = true))
+    fun onCurrencyClicked(currency: CurrencyAmountListItem) {
+        _baseCurrencyAmountChanges.onNext(currency.copy(isBase = true))
     }
 
     fun onBaseCurrencyAmountChanged(baseCurrency: CurrencyAmountListItem) {
@@ -59,7 +59,6 @@ class CurrenciesViewModel(
             ObserveCurrenciesUseCase.InputData(
                 scrollingStateObserver,
                 _baseCurrencyAmountChanges.map {
-                    Timber.d("Debugging Rx: Received base $it")
                     BaseCurrency(it.currency, it.amount)
                 }
             )

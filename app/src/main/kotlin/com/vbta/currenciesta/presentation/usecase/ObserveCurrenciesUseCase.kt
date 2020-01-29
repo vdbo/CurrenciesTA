@@ -11,7 +11,6 @@ import com.vbta.currenciesta.presentation.utils.ScrollingState
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 import java.math.RoundingMode
 import java.util.concurrent.TimeUnit
 
@@ -32,12 +31,13 @@ class ObserveCurrenciesUseCase(
     @SuppressLint("CheckResult")
     override fun execute(data: InputData): Observable<List<CurrencyAmountListItem>> {
         val (scrollingStateObservable, baseCurrencyObservable) = data
+        var lastBaseCurrency: BaseCurrency? = null
 
         return Observables.combineLatest(
-            baseCurrencyObservable,
+            baseCurrencyObservable.doOnNext { lastBaseCurrency = it },
             Observable.interval(INITIAL_DELAY_MILLISECONDS, PING_PERIOD_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .switchMap {
-                    baseCurrencyObservable.flatMapSingle { getCurrenciesRatesUseCase.execute(it) }
+                .switchMapSingle {
+                    lastBaseCurrency?.let { getCurrenciesRatesUseCase.execute(it) }
                 }
         ) { newBaseCurrency, (oldBaseCurrency, rates) ->
             when {
@@ -52,7 +52,6 @@ class ObserveCurrenciesUseCase(
             }
 
         }
-            .throttleFirst(INITIAL_DELAY_MILLISECONDS, TimeUnit.MILLISECONDS)
             .takeUntil(scrollingStateObservable.filter { it == ScrollingState.SCROLLING })
             .repeatWhen { scrollingStateObservable.filter { it == ScrollingState.IDLE } }
             .subscribeOn(Schedulers.io())
@@ -63,10 +62,8 @@ class ObserveCurrenciesUseCase(
         newBaseCurrency: BaseCurrency,
         oldBaseCurrency: BaseCurrency
     ): ArrayList<CurrencyRate> {
-        val currencyRateOfNewBaseCurrency = rates.find {
-            it.currency == newBaseCurrency.currency
-        } ?: throw IllegalArgumentException("Old base currency wasn't find in previous rates")
-        // TODO change to big decimal
+        val currencyRateOfNewBaseCurrency = rates.find { it.currency == newBaseCurrency.currency }
+            ?: throw IllegalArgumentException("Old base currency wasn't find in previous rates")
         val rateOfOldBaseCurrency = (1 / currencyRateOfNewBaseCurrency.rate).toBigDecimal()
             .setScale(5, RoundingMode.UP)
             .toDouble()
@@ -88,7 +85,6 @@ class ObserveCurrenciesUseCase(
             newBaseCurrency.amount,
             true
         )
-        Timber.d("Debugging Rx: Passed list with base = $baseCurrencyListItem & curs from ObserveCurrenciesUseCase")
         return arrayListOf<CurrencyAmountListItem>().apply {
             add(baseCurrencyListItem)
             addAll(rates.toCurrencyAmountListItem(baseCurrencyListItem))

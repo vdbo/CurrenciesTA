@@ -4,8 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
 import com.vbta.currenciesta.R
+import java.text.NumberFormat
 
-class CurrenciesAdapter(private val actions: CurrenciesActions) : RecyclerView.Adapter<CurrencyAmountViewHolder>() {
+class CurrenciesAdapter(
+    private val actions: CurrenciesActions,
+    private val numberFormat: NumberFormat
+) : RecyclerView.Adapter<CurrencyAmountViewHolder>() {
 
     private val diffHelper = AsyncListDiffer(
         AdapterListUpdateCallback(this),
@@ -15,7 +19,7 @@ class CurrenciesAdapter(private val actions: CurrenciesActions) : RecyclerView.A
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyAmountViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_currency_amount, parent, false)
-        return CurrencyAmountViewHolder(view, actions)
+        return CurrencyAmountViewHolder(view, actions, numberFormat)
     }
 
     override fun getItemCount() = items.size
@@ -31,7 +35,7 @@ class CurrenciesAdapter(private val actions: CurrenciesActions) : RecyclerView.A
         }
         (payloads[0] as? Payload<*>)?.let {
             when (it) {
-                is Payload.Amount -> holder.setAmount(it.value)
+                is Payload.Amount -> holder.updateAmount(it.value)
                 else -> holder.bind(items[position])
             }
         }

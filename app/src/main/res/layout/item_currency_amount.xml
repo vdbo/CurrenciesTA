@@ -12,10 +12,9 @@
         tools:src="@drawable/ic_eur" />
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginStart="16dp"
-        android:layout_weight="1"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
@@ -41,15 +40,22 @@
 
     </LinearLayout>
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
     <EditText
         android:id="@+id/amount"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
         android:hint="@string/default_amount"
         android:importantForAutofill="no"
         android:inputType="numberDecimal"
-        android:textColor="@drawable/selector_et_text_color"
+        android:maxLength="21"
         android:lineSpacingExtra="5sp"
+        android:textColor="@drawable/selector_et_text_color"
         tools:text="3204.10" />
 
 
