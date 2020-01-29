@@ -23,7 +23,6 @@ class CurrenciesFragment : BaseFragment<CurrenciesViewModel>(), CurrenciesAction
 
     interface ViewsChanges {
         val scrollingStateObserver: Observer<ScrollingState>
-        val onListLayoutCompletedObserver: Observer<Boolean>
     }
 
     companion object {

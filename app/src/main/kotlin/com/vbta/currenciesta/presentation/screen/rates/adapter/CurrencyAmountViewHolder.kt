@@ -28,7 +28,9 @@ class CurrencyAmountViewHolder(
         }
         itemView.amount.doAfterTextChanged {
             if (!item.isBase || ignoreTextChanges) return@doAfterTextChanged
-            actions.onBaseCurrencyAmountChanged(item.copy(amount = numberFormat.parse(it.toString())))
+
+            val value = if (it.isNullOrEmpty()) 0 else numberFormat.parse(it.toString())
+            actions.onBaseCurrencyAmountChanged(item.copy(amount = value))
         }
     }
 

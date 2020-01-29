@@ -1,5 +1,6 @@
 package com.vbta.currenciesta.data.repository
 
+import com.vbta.currenciesta.data.mapper.toCurrencyRates
 import com.vbta.currenciesta.data.source.remote.CurrenciesApi
 import com.vbta.currenciesta.domain.model.CurrencyRate
 import com.vbta.currenciesta.domain.repository.CurrencyRateRepositoryContract
@@ -13,9 +14,7 @@ class CurrencyRateRepository(
 
     override fun getRatesForCurrency(currency: Currency): Single<List<CurrencyRate>> =
         currenciesApi.getCurrenciesRate(currency.currencyCode)
-            .map { result ->
-                result.rates.map { CurrencyRate(Currency.getInstance(it.key), it.value) }
-            }
+            .map { it.toCurrencyRates() }
             .subscribeOn(Schedulers.io())
 
 }

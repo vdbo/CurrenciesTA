@@ -7,10 +7,10 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val presentationModule = module {
-    viewModel { provideRatesViewModel(get()) }
+    single { provideDecimalFormatter() }
+    factory { provideObserveCurrenciesUseCase(get(), get()) }
     scope(named<CurrenciesFragment>()) {
-        scoped { provideDecimalFormatter() }
         scoped { (actions: CurrenciesActions) -> provideRatesAdapter(actions, get()) }
     }
-    factory { provideObserveCurrenciesUseCase(get()) }
+    viewModel { provideRatesViewModel(get()) }
 }

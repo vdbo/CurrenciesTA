@@ -18,10 +18,8 @@ fun provideRatesAdapter(
 ) = CurrenciesAdapter(actions, numberFormat)
 
 fun provideObserveCurrenciesUseCase(
-    getCurrenciesRatesUseCase: GetCurrenciesRatesUseCase
-) = ObserveCurrenciesUseCase(getCurrenciesRatesUseCase)
+    getCurrenciesRatesUseCase: GetCurrenciesRatesUseCase,
+    numberFormat: NumberFormat
+) = ObserveCurrenciesUseCase(getCurrenciesRatesUseCase, numberFormat)
 
-fun provideDecimalFormatter(): NumberFormat = DecimalFormat.getInstance().apply {
-    maximumFractionDigits = 5
-    maximumIntegerDigits = 12
-}
+fun provideDecimalFormatter(): NumberFormat = DecimalFormat("#,###.#####")

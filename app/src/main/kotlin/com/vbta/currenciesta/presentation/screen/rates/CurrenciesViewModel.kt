@@ -32,7 +32,6 @@ class CurrenciesViewModel(
     private val _baseCurrencyAmountChanges = BehaviorSubject.createDefault(INITIAL_BASE_CURRENCY)
     private var observeCurrenciesDisposable = Disposables.empty()
     override val scrollingStateObserver = BehaviorSubject.createDefault(ScrollingState.IDLE)
-    override val onListLayoutCompletedObserver = PublishSubject.create<Boolean>()
 
     val itemsChanges: Observable<List<CurrencyAmountListItem>> = _itemsChanges
 
