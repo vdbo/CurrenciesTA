@@ -2,4 +2,5 @@
     <string name="app_name">CurrenciesTA</string>
     <string name="rates">Rates</string>
     <string name="default_amount">0</string>
+    <string name="failed_currencies">Failed to get currencies :(</string>
 </resources>

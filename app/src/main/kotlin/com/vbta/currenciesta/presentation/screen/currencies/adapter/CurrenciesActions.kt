@@ -1,4 +1,4 @@
-package com.vbta.currenciesta.presentation.screen.rates.adapter
+package com.vbta.currenciesta.presentation.screen.currencies.adapter
 
 interface CurrenciesActions {
     fun onCurrencyClicked(item: CurrencyAmountListItem)

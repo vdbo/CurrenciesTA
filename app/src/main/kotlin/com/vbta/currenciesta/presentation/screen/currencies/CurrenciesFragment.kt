@@ -1,15 +1,17 @@
-package com.vbta.currenciesta.presentation.screen.rates
+package com.vbta.currenciesta.presentation.screen.currencies
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vbta.currenciesta.R
 import com.vbta.currenciesta.presentation.screen.base.BaseFragment
-import com.vbta.currenciesta.presentation.screen.rates.adapter.CurrenciesActions
-import com.vbta.currenciesta.presentation.screen.rates.adapter.CurrenciesAdapter
-import com.vbta.currenciesta.presentation.screen.rates.adapter.CurrencyAmountListItem
+import com.vbta.currenciesta.presentation.screen.base.DataState
+import com.vbta.currenciesta.presentation.screen.currencies.adapter.CurrenciesActions
+import com.vbta.currenciesta.presentation.screen.currencies.adapter.CurrenciesAdapter
+import com.vbta.currenciesta.presentation.screen.currencies.adapter.CurrencyAmountListItem
 import com.vbta.currenciesta.presentation.utils.ScrollStateChangeListener
 import com.vbta.currenciesta.presentation.utils.ScrollingState
 import io.reactivex.Observer
@@ -50,7 +52,14 @@ class CurrenciesFragment : BaseFragment<CurrenciesViewModel>(), CurrenciesAction
 
     override fun onResume() {
         super.onResume()
-        disposables += vm.itemsChanges.subscribe(currenciesAdapter::setItems)
+        disposables += vm.itemsChanges.subscribe {
+            loading.isVisible = it is DataState.Loading
+            currencies.isVisible = it is DataState.Loaded
+            failed.isVisible = it is DataState.Failed
+            if (it is DataState.Loaded) {
+                currenciesAdapter.setItems(it.data)
+            }
+        }
     }
 
     override fun onCurrencyClicked(item: CurrencyAmountListItem) {

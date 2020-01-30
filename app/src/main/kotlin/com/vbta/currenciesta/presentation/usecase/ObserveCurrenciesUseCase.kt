@@ -5,8 +5,8 @@ import com.vbta.currenciesta.domain.model.BaseCurrency
 import com.vbta.currenciesta.domain.model.CurrencyRate
 import com.vbta.currenciesta.domain.usecase.GetCurrenciesRatesUseCase
 import com.vbta.currenciesta.domain.usecase.UseCase
-import com.vbta.currenciesta.presentation.screen.rates.adapter.CurrencyAmountListItem
-import com.vbta.currenciesta.presentation.screen.rates.mapper.toCurrencyAmountListItem
+import com.vbta.currenciesta.presentation.screen.currencies.adapter.CurrencyAmountListItem
+import com.vbta.currenciesta.presentation.screen.currencies.mapper.toCurrencyAmountListItem
 import com.vbta.currenciesta.presentation.utils.ScrollingState
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
@@ -54,7 +54,7 @@ class ObserveCurrenciesUseCase(
 
         }
             .takeUntil(scrollingStateObservable.filter { it == ScrollingState.SCROLLING })
-            .repeatWhen { scrollingStateObservable.filter { it == ScrollingState.IDLE } }
+            .repeatWhen { anys -> anys.flatMap { scrollingStateObservable.filter { it == ScrollingState.IDLE } } }
             .subscribeOn(Schedulers.io())
     }
 

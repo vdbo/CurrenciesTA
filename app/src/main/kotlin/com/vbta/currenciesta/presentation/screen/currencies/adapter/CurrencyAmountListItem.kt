@@ -1,4 +1,4 @@
-package com.vbta.currenciesta.presentation.screen.rates.adapter
+package com.vbta.currenciesta.presentation.screen.currencies.adapter
 
 import com.vbta.currenciesta.presentation.screen.base.ListItem
 import java.util.*

@@ -1,4 +1,4 @@
-package com.vbta.currenciesta.presentation.screen.rates.adapter
+package com.vbta.currenciesta.presentation.screen.currencies.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
