@@ -68,7 +68,7 @@ class CurrenciesViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .doOnComplete { _itemsChanges.onNext(DataState.Failed(NetworkState.Lost.error)) }
             .repeatWhen { anys -> anys.flatMap { networkChanges.filter { it is NetworkState.Available } } }
-            .retryWhen { errors -> errors.flatMap { networkChanges.filter { it is NetworkState.Lost } } }
+            .retryWhen { errors -> errors.flatMap { networkChanges.filter { it is NetworkState.Available } } }
             .subscribeBy { _itemsChanges.onNext(DataState.Loaded(it)) }
     }
 

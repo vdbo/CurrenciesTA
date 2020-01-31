@@ -26,7 +26,7 @@ class CurrencyAmountViewHolder(
     init {
         val clickListener = { _: View ->
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                itemView.forceRequestFocus()
+                itemView.amount.forceRequestFocus()
                 actions.onCurrencyClicked(item)
             }
         }

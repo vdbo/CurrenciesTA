@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
     private val networkStateListener: NetworkStateListener by inject()
     private val connectivityManager by lazy(LazyThreadSafetyMode.NONE) {
-        (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+        getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
