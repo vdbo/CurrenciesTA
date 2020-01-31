@@ -12,6 +12,6 @@ class GetCurrenciesRatesUseCase(
 
     override fun execute(data: BaseCurrency): Single<Pair<BaseCurrency, List<CurrencyRate>>> =
         currencyRateRepository.getRatesForCurrency(data.currency)
-            .map { rates -> data to rates.sortedBy { it.currency.currencyCode } }
+            .map { rates -> data to rates }
             .subscribeOn(Schedulers.io())
 }

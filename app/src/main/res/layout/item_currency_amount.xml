@@ -9,11 +9,12 @@
         android:id="@+id/flag"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
         tools:src="@drawable/ic_eur" />
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:gravity="center_vertical"
         android:orientation="vertical">
@@ -36,7 +37,7 @@
             android:lineSpacingExtra="4sp"
             android:textColor="@color/manatee"
             android:textSize="16sp"
-            tools:text="Euro" />
+            tools:text="Europa" />
 
     </LinearLayout>
 
@@ -48,13 +49,14 @@
     <EditText
         android:id="@+id/amount"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_marginStart="8dp"
         android:hint="@string/default_amount"
         android:importantForAutofill="no"
         android:inputType="numberDecimal"
-        android:maxLength="21"
         android:lineSpacingExtra="5sp"
+        android:maxLength="21"
         android:textColor="@drawable/selector_et_text_color"
         tools:text="3204.10" />
 

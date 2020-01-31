@@ -1,6 +1,5 @@
 package com.vbta.currenciesta.presentation.screen.currencies
 
-import android.accounts.NetworkErrorException
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.OnLifecycleEvent
 import com.vbta.currenciesta.domain.model.BaseCurrency
@@ -69,11 +68,11 @@ class CurrenciesViewModel(
         )
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError { _itemsChanges.onNext(DataState.Failed(it)) }
-            .takeUntil(networkChanges.filter { it == NetworkState.LOST })
+            .takeUntil(networkChanges.filter { it is NetworkState.Lost })
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnComplete { _itemsChanges.onNext(DataState.Failed(NetworkErrorException())) }
-            .repeatWhen { anys -> anys.flatMap { networkChanges.filter { it == NetworkState.AVAILABLE } } }
-            .retryWhen { errors -> errors.flatMap { networkChanges.filter { it == NetworkState.AVAILABLE } } }
+            .doOnComplete { _itemsChanges.onNext(DataState.Failed(NetworkState.Lost.error)) }
+            .repeatWhen { anys -> anys.flatMap { networkChanges.filter { it is NetworkState.Available } } }
+            .retryWhen { errors -> errors.flatMap { networkChanges.filter { it is NetworkState.Lost } } }
             .subscribeBy { _itemsChanges.onNext(DataState.Loaded(it)) }
     }
 

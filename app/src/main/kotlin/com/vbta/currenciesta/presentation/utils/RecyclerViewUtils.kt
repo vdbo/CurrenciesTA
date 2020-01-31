@@ -8,14 +8,13 @@ enum class ScrollingState {
 }
 
 class ScrollStateChangeListener(
-    private val onStateChanged: Observer<ScrollingState>
+    private val scrollStateChanges: Observer<ScrollingState>
 ) : RecyclerView.OnScrollListener() {
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-        super.onScrollStateChanged(recyclerView, newState)
         when (newState) {
-            RecyclerView.SCROLL_STATE_IDLE -> onStateChanged.onNext(ScrollingState.IDLE)
-            else -> onStateChanged.onNext(ScrollingState.SCROLLING)
+            RecyclerView.SCROLL_STATE_IDLE -> scrollStateChanges.onNext(ScrollingState.IDLE)
+            else -> scrollStateChanges.onNext(ScrollingState.SCROLLING)
         }
     }
 }

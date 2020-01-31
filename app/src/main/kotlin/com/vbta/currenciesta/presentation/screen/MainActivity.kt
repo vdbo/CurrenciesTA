@@ -14,6 +14,9 @@ import org.koin.android.ext.android.inject
 class MainActivity : AppCompatActivity() {
 
     private val networkStateListener: NetworkStateListener by inject()
+    private val connectivityManager by lazy(LazyThreadSafetyMode.NONE) {
+        (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,17 +31,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-            .registerNetworkCallback(
-                NetworkRequest.Builder().build(),
-                networkStateListener
-            )
+        connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), networkStateListener)
     }
 
     override fun onStop() {
         super.onStop()
-        (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-            .unregisterNetworkCallback(networkStateListener)
+        connectivityManager.unregisterNetworkCallback(networkStateListener)
     }
 
 }

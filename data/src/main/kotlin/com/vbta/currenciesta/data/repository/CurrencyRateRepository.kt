@@ -14,7 +14,7 @@ class CurrencyRateRepository(
 
     override fun getRatesForCurrency(currency: Currency): Single<List<CurrencyRate>> =
         currenciesApi.getCurrenciesRate(currency.currencyCode)
-            .map { it.toCurrencyRates() }
+            .map { result -> result.toCurrencyRates().sortedBy { it.currency.currencyCode } }
             .subscribeOn(Schedulers.io())
 
 }

@@ -4,22 +4,24 @@ import android.net.ConnectivityManager
 import android.net.Network
 import io.reactivex.Observer
 
-enum class NetworkState {
-    AVAILABLE, LOST
+sealed class NetworkState {
+    object Available : NetworkState()
+
+    object Lost : NetworkState() {
+        val error = RuntimeException("Internet connection was lost")
+    }
 }
 
 class NetworkStateListener(
-    private val networkObserver: Observer<NetworkState>
+    private val networkStateChanges: Observer<NetworkState>
 ) : ConnectivityManager.NetworkCallback() {
 
     override fun onAvailable(network: Network) {
-        super.onAvailable(network)
-        networkObserver.onNext(NetworkState.AVAILABLE)
+        networkStateChanges.onNext(NetworkState.Available)
     }
 
     override fun onLost(network: Network) {
-        super.onLost(network)
-        networkObserver.onNext(NetworkState.LOST)
+        networkStateChanges.onNext(NetworkState.Lost)
     }
 
 }
