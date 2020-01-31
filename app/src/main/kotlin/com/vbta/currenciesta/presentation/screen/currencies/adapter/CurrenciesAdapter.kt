@@ -3,10 +3,12 @@ package com.vbta.currenciesta.presentation.screen.currencies.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
+import com.bumptech.glide.RequestManager
 import com.vbta.currenciesta.R
 import java.text.NumberFormat
 
 class CurrenciesAdapter(
+    private val glide: RequestManager,
     private val actions: CurrenciesActions,
     private val numberFormat: NumberFormat
 ) : RecyclerView.Adapter<CurrencyAmountViewHolder>() {
@@ -19,7 +21,7 @@ class CurrenciesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyAmountViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_currency_amount, parent, false)
-        return CurrencyAmountViewHolder(view, actions, numberFormat)
+        return CurrencyAmountViewHolder(view, glide, actions, numberFormat)
     }
 
     override fun getItemCount() = items.size

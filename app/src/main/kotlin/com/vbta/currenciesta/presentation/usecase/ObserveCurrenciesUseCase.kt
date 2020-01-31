@@ -11,6 +11,7 @@ import com.vbta.currenciesta.presentation.utils.ScrollingState
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import java.text.NumberFormat
 import java.util.concurrent.TimeUnit
 
@@ -25,8 +26,8 @@ class ObserveCurrenciesUseCase(
     )
 
     companion object {
-        private const val INITIAL_DELAY_MILLISECONDS = 500L
-        private const val PING_PERIOD_MILLISECONDS = 1000L
+        private const val INITIAL_DELAY_MS = 500L
+        private const val PING_PERIOD_MS = 1000L
     }
 
     @SuppressLint("CheckResult")
@@ -36,7 +37,7 @@ class ObserveCurrenciesUseCase(
 
         return Observables.combineLatest(
             baseCurrencyObservable.doOnNext { lastBaseCurrency = it },
-            Observable.interval(INITIAL_DELAY_MILLISECONDS, PING_PERIOD_MILLISECONDS, TimeUnit.MILLISECONDS)
+            Observable.interval(INITIAL_DELAY_MS, PING_PERIOD_MS, TimeUnit.MILLISECONDS)
                 .switchMapSingle {
                     lastBaseCurrency?.let { getCurrenciesRatesUseCase.execute(it) }
                 }

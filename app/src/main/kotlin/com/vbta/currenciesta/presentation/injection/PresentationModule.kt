@@ -1,5 +1,6 @@
 package com.vbta.currenciesta.presentation.injection
 
+import com.bumptech.glide.RequestManager
 import com.vbta.currenciesta.presentation.screen.currencies.CurrenciesFragment
 import com.vbta.currenciesta.presentation.screen.currencies.adapter.CurrenciesActions
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -14,7 +15,7 @@ val presentationModule = module {
     single { provideDecimalFormatter() }
     factory { provideObserveCurrenciesUseCase(get(), get()) }
     scope(named<CurrenciesFragment>()) {
-        scoped { (actions: CurrenciesActions) -> provideRatesAdapter(actions, get()) }
+        scoped { (glide: RequestManager, actions: CurrenciesActions) -> provideRatesAdapter(glide, actions, get()) }
     }
     viewModel { provideRatesViewModel(get(), get(named(QUALIFIER_NETWORK_CHANGES))) }
 }

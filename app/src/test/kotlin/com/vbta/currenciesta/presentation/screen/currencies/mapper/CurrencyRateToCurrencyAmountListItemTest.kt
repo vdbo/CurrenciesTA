@@ -1,18 +1,12 @@
 package com.vbta.currenciesta.presentation.screen.currencies.mapper
 
 import com.vbta.currenciesta.domain.model.CurrencyRate
-import com.vbta.currenciesta.presentation.TrampolineSchedulerRule
 import com.vbta.currenciesta.presentation.screen.currencies.adapter.CurrencyAmountListItem
 import org.junit.Assert.assertEquals
-import org.junit.Rule
 import org.junit.Test
 import java.util.*
 
 class CurrencyRateToCurrencyAmountListItemTest {
-
-    @Rule
-    @JvmField
-    val trampolineSchedulerRule = TrampolineSchedulerRule()
 
     private val baseCurrency = CurrencyAmountListItem(Currency.getInstance("EUR"), 100, true)
     private val currenciesRates = listOf(

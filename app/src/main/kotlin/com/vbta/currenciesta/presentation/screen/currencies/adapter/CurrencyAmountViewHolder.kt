@@ -3,15 +3,17 @@ package com.vbta.currenciesta.presentation.screen.currencies.adapter
 import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.vbta.currenciesta.R
+import com.vbta.currenciesta.presentation.utils.forceRequestFocus
 import com.vbta.currenciesta.presentation.utils.imageRes
 import kotlinx.android.synthetic.main.item_currency_amount.view.*
 import java.text.NumberFormat
 
 class CurrencyAmountViewHolder(
     itemView: View,
+    private val glide: RequestManager,
     private val actions: CurrenciesActions,
     private val numberFormat: NumberFormat
 ) : RecyclerView.ViewHolder(itemView) {
@@ -22,7 +24,7 @@ class CurrencyAmountViewHolder(
     init {
         itemView.setOnClickListener {
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                it.requestFocus()
+                itemView.forceRequestFocus()
                 actions.onCurrencyClicked(item)
             }
         }
@@ -49,8 +51,7 @@ class CurrencyAmountViewHolder(
     }
 
     private fun setFlag(newItem: CurrencyAmountListItem) {
-        Glide.with(itemView)
-            .load(newItem.currency.imageRes)
+        glide.load(newItem.currency.imageRes)
             .placeholder(R.drawable.ic_cur_placeholder)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .circleCrop()

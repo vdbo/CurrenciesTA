@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.vbta.currenciesta.R
 import com.vbta.currenciesta.presentation.screen.base.BaseFragment
 import com.vbta.currenciesta.presentation.screen.base.DataState
@@ -28,10 +29,13 @@ class CurrenciesFragment : BaseFragment<CurrenciesViewModel>(), CurrenciesAction
     }
 
     companion object {
+        private const val SKIP_BASE_CURRENCY_CHANGE_MS = 500
+
         fun newInstance() = CurrenciesFragment()
     }
 
-    private val currenciesAdapter: CurrenciesAdapter by currentScope.inject { parametersOf(this) }
+    private val currenciesAdapter: CurrenciesAdapter by currentScope.inject { parametersOf(Glide.with(this), this) }
+    private var lastTimeCurrencyChanged: Long = 0
     override val vm: CurrenciesViewModel by viewModel()
 
     override fun onCreateView(
@@ -63,11 +67,14 @@ class CurrenciesFragment : BaseFragment<CurrenciesViewModel>(), CurrenciesAction
     }
 
     override fun onCurrencyClicked(item: CurrencyAmountListItem) {
-        vm.onCurrencyClicked(item)
+        if (System.currentTimeMillis() - lastTimeCurrencyChanged < SKIP_BASE_CURRENCY_CHANGE_MS) return
+
+        lastTimeCurrencyChanged = System.currentTimeMillis()
+        vm.baseCurrencyChanges.onNext(item.copy(isBase = true))
     }
 
     override fun onBaseCurrencyAmountChanged(currency: CurrencyAmountListItem) {
-        vm.onBaseCurrencyAmountChanged(currency)
+        vm.baseCurrencyChanges.onNext(currency)
     }
 
 }

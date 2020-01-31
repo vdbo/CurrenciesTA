@@ -1,5 +1,6 @@
 package com.vbta.currenciesta.presentation.injection
 
+import com.bumptech.glide.RequestManager
 import com.vbta.currenciesta.domain.usecase.GetCurrenciesRatesUseCase
 import com.vbta.currenciesta.presentation.screen.currencies.CurrenciesViewModel
 import com.vbta.currenciesta.presentation.screen.currencies.adapter.CurrenciesActions
@@ -16,9 +17,10 @@ fun provideRatesViewModel(
 ) = CurrenciesViewModel(observeCurrenciesUseCase, networkChanges)
 
 fun provideRatesAdapter(
+    glide: RequestManager,
     actions: CurrenciesActions,
     numberFormat: NumberFormat
-) = CurrenciesAdapter(actions, numberFormat)
+) = CurrenciesAdapter(glide, actions, numberFormat)
 
 fun provideObserveCurrenciesUseCase(
     getCurrenciesRatesUseCase: GetCurrenciesRatesUseCase,
