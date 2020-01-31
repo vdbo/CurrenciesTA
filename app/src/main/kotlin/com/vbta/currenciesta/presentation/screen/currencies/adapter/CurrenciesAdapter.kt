@@ -1,16 +1,18 @@
 package com.vbta.currenciesta.presentation.screen.currencies.adapter
 
+import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
 import com.bumptech.glide.RequestManager
 import com.vbta.currenciesta.R
-import java.text.NumberFormat
+import java.text.DecimalFormat
 
 class CurrenciesAdapter(
     private val glide: RequestManager,
     private val actions: CurrenciesActions,
-    private val numberFormat: NumberFormat
+    private val numberFormat: DecimalFormat,
+    private val inputFilter: InputFilter
 ) : RecyclerView.Adapter<CurrencyAmountViewHolder>() {
 
     private val diffHelper = AsyncListDiffer(
@@ -21,7 +23,7 @@ class CurrenciesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyAmountViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_currency_amount, parent, false)
-        return CurrencyAmountViewHolder(view, glide, actions, numberFormat)
+        return CurrencyAmountViewHolder(view, glide, actions, numberFormat, inputFilter)
     }
 
     override fun getItemCount() = items.size

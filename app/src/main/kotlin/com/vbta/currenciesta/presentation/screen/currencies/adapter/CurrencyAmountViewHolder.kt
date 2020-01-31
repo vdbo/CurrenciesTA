@@ -1,5 +1,6 @@
 package com.vbta.currenciesta.presentation.screen.currencies.adapter
 
+import android.text.InputFilter
 import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
@@ -9,31 +10,35 @@ import com.vbta.currenciesta.R
 import com.vbta.currenciesta.presentation.utils.forceRequestFocus
 import com.vbta.currenciesta.presentation.utils.imageRes
 import kotlinx.android.synthetic.main.item_currency_amount.view.*
-import java.text.NumberFormat
+import java.text.DecimalFormat
 
 class CurrencyAmountViewHolder(
     itemView: View,
     private val glide: RequestManager,
     private val actions: CurrenciesActions,
-    private val numberFormat: NumberFormat
+    private val numberFormat: DecimalFormat,
+    private val inputFilter: InputFilter
 ) : RecyclerView.ViewHolder(itemView) {
 
     private lateinit var item: CurrencyAmountListItem
     private var ignoreTextChanges: Boolean = true
 
     init {
-        itemView.setOnClickListener {
+        val clickListener = { _: View ->
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 itemView.forceRequestFocus()
                 actions.onCurrencyClicked(item)
             }
         }
+        itemView.setOnClickListener(clickListener)
+        itemView.amount.setOnClickListener { if (!item.isBase) clickListener(it) }
         itemView.amount.doAfterTextChanged {
             if (!item.isBase || ignoreTextChanges) return@doAfterTextChanged
 
             val value = if (it.isNullOrEmpty()) 0 else numberFormat.parse(it.toString())
             actions.onBaseCurrencyAmountChanged(item.copy(amount = value))
         }
+        itemView.amount.filters = arrayOf(inputFilter)
     }
 
     fun bind(newItem: CurrencyAmountListItem) {
@@ -61,7 +66,8 @@ class CurrencyAmountViewHolder(
     private fun bindAsBaseCurrency() {
         itemView.code.text = item.currency.currencyCode
         itemView.name.text = item.currency.displayName
-        itemView.amount.isEnabled = true
+        itemView.amount.isFocusable = true
+        itemView.amount.isFocusableInTouchMode = true
         ignoreTextChanges = true
         itemView.amount.setText(numberFormat.format(item.amount.toDouble()))
         ignoreTextChanges = false
@@ -70,7 +76,8 @@ class CurrencyAmountViewHolder(
     private fun bindAsOtherCurrency() {
         itemView.code.text = item.currency.currencyCode
         itemView.name.text = item.currency.displayName
-        itemView.amount.isEnabled = false
+        itemView.amount.isFocusable = false
+        itemView.amount.isFocusableInTouchMode = false
         itemView.amount.setText(numberFormat.format(item.amount.toDouble()))
     }
 

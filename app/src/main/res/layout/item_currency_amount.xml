@@ -13,9 +13,10 @@
         tools:src="@drawable/ic_eur" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_weight="4"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
@@ -37,28 +38,34 @@
             android:lineSpacingExtra="4sp"
             android:textColor="@color/manatee"
             android:textSize="16sp"
-            tools:text="Europa" />
+            tools:text="Пивденоафриканський ранд" />
 
     </LinearLayout>
 
-    <View
+    <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/amount"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="8dp"
-        android:hint="@string/default_amount"
-        android:importantForAutofill="no"
-        android:inputType="numberDecimal"
-        android:lineSpacingExtra="5sp"
-        android:maxLength="21"
-        android:textColor="@drawable/selector_et_text_color"
-        tools:text="3204.10" />
+        android:layout_marginBottom="2dp"
+        android:layout_weight="6"
+        android:gravity="end"
+        android:orientation="horizontal">
 
+        <EditText
+            android:id="@+id/amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_background"
+            android:hint="@string/default_amount"
+            android:importantForAutofill="no"
+            android:inputType="numberDecimal"
+            android:lineSpacingExtra="5sp"
+            android:maxLength="21"
+            android:textColor="@drawable/selector_et_text_color"
+            android:textStyle="bold"
+            tools:text="3204.12" />
+
+    </LinearLayout>
 
 </LinearLayout>

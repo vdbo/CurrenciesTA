@@ -1,5 +1,6 @@
 package com.vbta.currenciesta.presentation.injection
 
+import android.text.InputFilter
 import com.bumptech.glide.RequestManager
 import com.vbta.currenciesta.domain.usecase.GetCurrenciesRatesUseCase
 import com.vbta.currenciesta.presentation.screen.currencies.CurrenciesViewModel
@@ -9,7 +10,6 @@ import com.vbta.currenciesta.presentation.usecase.ObserveCurrenciesUseCase
 import com.vbta.currenciesta.presentation.utils.NetworkState
 import io.reactivex.Observable
 import java.text.DecimalFormat
-import java.text.NumberFormat
 
 fun provideRatesViewModel(
     observeCurrenciesUseCase: ObserveCurrenciesUseCase,
@@ -19,12 +19,11 @@ fun provideRatesViewModel(
 fun provideRatesAdapter(
     glide: RequestManager,
     actions: CurrenciesActions,
-    numberFormat: NumberFormat
-) = CurrenciesAdapter(glide, actions, numberFormat)
+    numberFormat: DecimalFormat,
+    inputFilter: InputFilter
+) = CurrenciesAdapter(glide, actions, numberFormat, inputFilter)
 
 fun provideObserveCurrenciesUseCase(
     getCurrenciesRatesUseCase: GetCurrenciesRatesUseCase,
-    numberFormat: NumberFormat
+    numberFormat: DecimalFormat
 ) = ObserveCurrenciesUseCase(getCurrenciesRatesUseCase, numberFormat)
-
-fun provideDecimalFormatter(): NumberFormat = DecimalFormat("#,###.#####")

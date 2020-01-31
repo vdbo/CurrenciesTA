@@ -11,13 +11,12 @@ import com.vbta.currenciesta.presentation.utils.ScrollingState
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
-import java.text.NumberFormat
+import java.text.DecimalFormat
 import java.util.concurrent.TimeUnit
 
 class ObserveCurrenciesUseCase(
     private val getCurrenciesRatesUseCase: GetCurrenciesRatesUseCase,
-    private val numberFormat: NumberFormat
+    private val numberFormat: DecimalFormat
 ) : UseCase<ObserveCurrenciesUseCase.InputData, Observable<List<CurrencyAmountListItem>>> {
 
     data class InputData(
@@ -66,7 +65,9 @@ class ObserveCurrenciesUseCase(
     ): ArrayList<CurrencyRate> {
         val currencyRateOfNewBaseCurrency = rates.find { it.currency == newBaseCurrency.currency }
             ?: throw IllegalArgumentException("Old base currency wasn't find in previous rates")
-        val rateOfOldBaseCurrency = numberFormat.format(1 / currencyRateOfNewBaseCurrency.rate).toDouble()
+        val rateOfOldBaseCurrency = numberFormat.parse(
+            numberFormat.format(1 / currencyRateOfNewBaseCurrency.rate)
+        ).toDouble()
         val ratesWithoutNewBaseCurrency = rates.toMutableList()
             .apply { remove(currencyRateOfNewBaseCurrency) }
         return arrayListOf<CurrencyRate>().apply {
